@@ -1,0 +1,21 @@
+.root {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    .scroll {
+        flex-grow: 1;
+        height: 0;
+        overflow: auto;
+    }
+    .item {
+        padding: 12px;
+        text-align: center;
+        border: 1px solid var(--adm-color-border);
+        border-radius: 8px;
+        cursor: pointer;
+    }
+    .active {
+        background-color: var(--adm-color-primary);
+        color: var(--adm-color-white);
+    }
+}

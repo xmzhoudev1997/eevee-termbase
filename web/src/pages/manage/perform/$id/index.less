@@ -1,0 +1,25 @@
+.root {
+  height: 100%;
+  :global {
+    textarea {
+      word-break: break-all;
+    }
+    .adm-list {
+      margin-top: 24px;
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+    .adm-list-item-description {
+      max-width: 200px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+  .item {
+    display: flex;
+    align-items: center;
+    column-gap: 12px;
+  }
+}

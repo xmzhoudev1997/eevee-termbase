@@ -1,0 +1,17 @@
+.root {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  :global {
+    .adm-pull-to-refresh {
+      flex-grow: 1;
+      height: 0;
+      overflow: auto;
+    }
+  }
+}
+.list {
+  flex-grow: 1;
+  height: 0;
+  overflow: auto;
+}
