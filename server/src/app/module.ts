@@ -1,39 +1,34 @@
+import { CacheModule } from '@nestjs/cache-manager';
 import { Module } from '@nestjs/common';
-import { TagPerformModule } from '../tag-perform/module';
-import { TagManageModule } from '../tag-manage/module';
-import { PerformManageModule } from '../perform-manage/module';
-import { SessionModule } from 'nestjs-session';
 import { ConfigModule } from '@nestjs/config';
+import { HeaderResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
 import { DBMysqlModule } from 'src/database-mysql/module';
-import { DBRedisModule } from 'src/database-redis/module';
-import { RedisService } from '@liaoliaots/nestjs-redis';
+import { TermbaseManageModule } from 'src/termbase-manage/module';
+import * as path from 'path';
+import { TermbaseViewModule } from 'src/termbase-view/module';
 
 @Module({
   imports: [
+    I18nModule.forRoot({
+      fallbackLanguage: 'zh-CN',
+      loaderOptions: {
+        path: path.join('./' || __dirname, '/locales/'),
+      },
+      resolvers: [
+        new QueryResolver(['locale']),
+        new HeaderResolver(['locale']),
+      ],
+    }),
+    CacheModule.register({
+      isGlobal: true,
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: `.env.${process.env.NODE_ENV || 'development'}`,
     }),
     DBMysqlModule,
-    SessionModule.forRootAsync({
-      imports: [DBRedisModule],
-      useFactory: async (redisService: RedisService) => {
-        const client = redisService.getClient();
-        const secret = await client.get('XMTV_CONFIG_SESSION_SECRER');
-        return {
-          session: {
-            secret,
-            resave: false,
-            saveUninitialized: false,
-            cookie: {
-              maxAge: 3600000,
-            },
-          },
-        }
-      },
-      inject: [RedisService]
-    }),
-    TagPerformModule, TagManageModule, PerformManageModule, TagManageModule,
+    TermbaseManageModule,
+    TermbaseViewModule,
   ],
 })
 export class AppModule {}
