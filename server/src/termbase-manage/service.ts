@@ -8,6 +8,8 @@ import { I18nService } from 'nestjs-i18n';
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 import * as dayjs from 'dayjs';
 import { TermbaseCacheService } from './cache';
+import { ClientProxy } from '@nestjs/microservices';
+import { MicroUserService } from 'src/micro-base/user';
 
 @Injectable()
 export class TermbaseManageService {
@@ -22,6 +24,7 @@ export class TermbaseManageService {
     @InjectEntityManager()
     private readonly entityManager: EntityManager,
     private readonly termbaseCacheService: TermbaseCacheService,
+    private readonly microUserService: MicroUserService,
   ) { }
   list = async (): Promise<TERMBASE_FULL[]> => {
     const list = await this.termbaseDb.find({
@@ -54,8 +57,9 @@ export class TermbaseManageService {
     if (repeat) {
       throw this.i18nService.translate('数据已存在');
     }
-    const id = String(Date.now());
-    const logId = String(Date.now());
+    console.log(111);
+    const [id, logId] = await this.microUserService.getIds(2);
+    console.log(id, logId);
     const addObj = {
       id,
       ...obj,
@@ -97,7 +101,7 @@ export class TermbaseManageService {
     if (!termbase) {
       throw this.i18nService.translate('数据不存在');
     }
-    const logId = String(Date.now());
+    const [logId] = await this.microUserService.getIds(2);
 
     await this.entityManager.transaction(async manager => {
       await Promise.all([
@@ -133,7 +137,7 @@ export class TermbaseManageService {
     if (!termbase) {
       throw this.i18nService.translate('数据不存在');
     }
-    const logId = String(Date.now());
+    const [logId] = await this.microUserService.getIds(2);
 
     await this.entityManager.transaction(async manager => {
       await Promise.all([
@@ -151,7 +155,7 @@ export class TermbaseManageService {
           createUser: userId,
           crateTime: dayjs().format('YYYY-MM-DD HH:mm:ss.SSS'),
         }),
-        this.cacheManager.del(termbase.content),
+        // this.cacheManager.del(termbase.content),
       ])
     });
   }
