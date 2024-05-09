@@ -1,5 +1,7 @@
 #!/bin/bash
 
+pnpm run build
+
 # 定义镜像名称和容器名称
 IMAGE_NAME="eevee-termbase-server"
 CONTAINER_NAME="eevee-termbase-server"
