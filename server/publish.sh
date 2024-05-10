@@ -1,5 +1,5 @@
 #!/bin/bash
-
+pnpm i
 pnpm run build
 
 # 定义镜像名称和容器名称
