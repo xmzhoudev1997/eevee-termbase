@@ -56,9 +56,7 @@ export class TermbaseManageService {
     if (repeat) {
       throw this.i18nService.translate('数据已存在');
     }
-    console.log(111);
     const [id, logId] = await this.microUserService.getIds(2);
-    console.log(id, logId);
     const addObj = {
       id,
       ...obj,
