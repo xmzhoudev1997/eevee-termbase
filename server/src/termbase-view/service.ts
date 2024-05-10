@@ -12,7 +12,7 @@ export class TermbaseViewService {
     const keyList = await this.cacheManager.store.keys();
     const list: TERMBASE_SIMPLE[] = [];
     for (const key of keyList) {
-      if (content.toLowerCase().includes(key.toLowerCase())) {
+      if (content?.toLowerCase().includes(key.toLowerCase())) {
         const obj = (await this.cacheManager.get(key)) || {};
         if (obj[locale]) {
           list.push({

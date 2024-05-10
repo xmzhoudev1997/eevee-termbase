@@ -8,7 +8,6 @@ import { I18nService } from 'nestjs-i18n';
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 import * as dayjs from 'dayjs';
 import { TermbaseCacheService } from './cache';
-import { ClientProxy } from '@nestjs/microservices';
 import { MicroUserService } from 'src/micro-base/user';
 
 @Injectable()
@@ -85,7 +84,7 @@ export class TermbaseManageService {
         async () => {
           const d = (await this.cacheManager.get(obj.content) || {});
           d[obj.locale] = obj.translationContent;
-          await this.cacheManager.set(obj.content, d);
+          await this.cacheManager.set(obj.content, d, 0);
         }
       ])
     });
@@ -122,7 +121,7 @@ export class TermbaseManageService {
         async () => {
           const d = (await this.cacheManager.get(termbase.content) || {});
           d[termbase.locale] = obj.translationContent;
-          await this.cacheManager.set(termbase.content, d);
+          await this.cacheManager.set(termbase.content, d, 0);
         }
       ])
     });
@@ -155,7 +154,7 @@ export class TermbaseManageService {
           createUser: userId,
           crateTime: dayjs().format('YYYY-MM-DD HH:mm:ss.SSS'),
         }),
-        // this.cacheManager.del(termbase.content),
+        this.cacheManager.del(termbase.content),
       ])
     });
   }

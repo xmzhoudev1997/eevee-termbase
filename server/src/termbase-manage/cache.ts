@@ -22,7 +22,7 @@ export class TermbaseCacheService implements OnModuleInit {
     for (const termase of list) {
       const obj = (await this.cacheManager.get(termase.content)) || {};
       obj[termase.locale] = termase.translationContent;
-      await this.cacheManager.set(termase.content, obj);
+      await this.cacheManager.set(termase.content, obj, 0);
     }
   }
 }
